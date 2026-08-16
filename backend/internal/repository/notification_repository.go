@@ -51,7 +51,7 @@ func (r *NotificationRepository) FindByID(id uint64) (*model.Notification, error
 	var n model.Notification
 	if err := r.db.First(&n, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrNotFound
+			return nil, errors.New("not found")
 		}
 		return nil, fmt.Errorf("find notification by id: %w", err)
 	}
