@@ -199,6 +199,9 @@ func (s *ActivityService) Stats(activityID, operatorID uint64, operatorRole stri
 	if err != nil {
 		return nil, util.Wrap(err, "Activity[id=%d] stats find failed", activityID)
 	}
+	if a == nil {
+		return nil, repository.ErrNotFound
+	}
 	if operatorRole != constants.RoleAdmin && a.OrganizerID != operatorID {
 		return nil, util.NewAppError(constants.CodeForbidden, "Activity[id="+itoa(activityID)+"] stats forbidden: organizer not match")
 	}

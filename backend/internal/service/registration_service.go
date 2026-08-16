@@ -74,6 +74,9 @@ func (s *RegistrationService) Cancel(id, operatorID uint64, operatorRole string)
 	if err != nil {
 		return nil, util.Wrap(err, "Registration[id=%d] cancel find failed", id)
 	}
+	if reg == nil {
+		return nil, repository.ErrNotFound
+	}
 	if operatorRole != constants.RoleAdmin && reg.UserID != operatorID {
 		return nil, util.NewAppError(constants.CodeForbidden, "Registration[id="+itoa(id)+"] cancel forbidden: not owner")
 	}
