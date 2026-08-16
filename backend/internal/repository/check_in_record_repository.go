@@ -34,7 +34,7 @@ func (r *CheckInRecordRepository) CreateTx(tx *gorm.DB, rec *model.CheckInRecord
 // ListByActivity 查询某活动的签到记录。
 func (r *CheckInRecordRepository) ListByActivity(activityID uint64) ([]model.CheckInRecord, error) {
 	var list []model.CheckInRecord
-	if err := r.db.Where("activity_id = ?", activityID).Order("check_in_time DESC").Find(&list).Error; err != nil {
+	if err := r.db.Where("activity_id = ?", activityID).Order("check_in_time ASC").Find(&list).Error; err != nil {
 		return nil, fmt.Errorf("list check-in records: %w", err)
 	}
 	return list, nil

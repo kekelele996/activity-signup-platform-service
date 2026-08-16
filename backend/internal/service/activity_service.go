@@ -212,7 +212,7 @@ func (s *ActivityService) Stats(activityID, operatorID uint64, operatorRole stri
 	}
 	rate := 0.0
 	if registered > 0 {
-		rate = float64(checked) / float64(registered) * 100
+		rate = float64(checked) / float64(registered)
 	}
 	s.logger.Info(constants.LogCheckinRateStats, "activity_id", activityID, "rate", rate)
 	return map[string]any{
