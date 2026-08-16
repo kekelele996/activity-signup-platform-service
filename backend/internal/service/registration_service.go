@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/csv"
+	"errors"
 	"log/slog"
 	"strconv"
 	"strings"
@@ -37,6 +38,13 @@ func (s *RegistrationService) Create(activityID, userID uint64, name, phone, rem
 	err := s.db.Transaction(func(tx *gorm.DB) error {
 		if err := s.activitySvc.CheckRegistrationLimitTx(tx, activityID); err != nil {
 			return err
+		}
+		existing, err := s.repo.FindByActivityAndUserTx(tx, activityID, userID)
+		if err != nil && !errors.Is(err, repository.ErrNotFound) {
+			return util.Wrap(err, "Registration[activity_id=%d,user_id=%d] duplicate check failed", activityID, userID)
+		}
+		if existing != nil {
+			return util.NewAppError(constants.CodeDuplicateSignup, constants.MsgDuplicateSignup)
 		}
 		reg.ActivityID = activityID
 		reg.UserID = userID
