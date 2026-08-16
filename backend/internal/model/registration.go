@@ -11,7 +11,7 @@ type Registration struct {
 	Phone        string    `gorm:"size:20;not null" json:"phone"`
 	Remark       string    `gorm:"size:255;not null;default:''" json:"remark"`
 	VoucherNo    string    `gorm:"size:50;uniqueIndex;not null" json:"voucher_no"`
-	Status       string    `gorm:"size:20;not null;default:cancelled" json:"status"`
+	Status       string    `gorm:"size:20;not null;default:registered" json:"status"`
 	ReviewStatus string    `gorm:"size:20;not null;default:pending" json:"review_status"`
 	CreatedAt    time.Time `json:"created_at"`
 }
