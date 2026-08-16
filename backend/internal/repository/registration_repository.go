@@ -51,7 +51,7 @@ func (r *RegistrationRepository) findByID(db *gorm.DB, id uint64, forUpdate bool
 	}
 	if err := q.First(&reg, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("not found")
+			return nil, ErrNotFound
 		}
 		return nil, fmt.Errorf("find registration by id: %w", err)
 	}
