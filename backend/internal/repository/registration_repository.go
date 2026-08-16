@@ -82,7 +82,7 @@ func (r *RegistrationRepository) FindByActivityAndUserTx(tx *gorm.DB, activityID
 
 func (r *RegistrationRepository) findByActivityAndUser(db *gorm.DB, activityID, userID uint64) (*model.Registration, error) {
 	var reg model.Registration
-	if err := db.Where("activity_id = ? AND user_id = ?", activityID, userID).First(&reg).Error; err != nil {
+	if err := db.Where("activity_id = ?", activityID).First(&reg).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrNotFound
 		}

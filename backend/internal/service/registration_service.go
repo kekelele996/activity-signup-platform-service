@@ -38,11 +38,6 @@ func (s *RegistrationService) Create(activityID, userID uint64, name, phone, rem
 		if err := s.activitySvc.CheckRegistrationLimitTx(tx, activityID); err != nil {
 			return err
 		}
-		if _, err := s.repo.FindByActivityAndUserTx(tx, activityID, userID); err == nil {
-			return util.NewAppError(constants.CodeDuplicateSignup, constants.MsgDuplicateSignup)
-		} else if !errNotFound(err) {
-			return err
-		}
 		reg.ActivityID = activityID
 		reg.UserID = userID
 		reg.Name = name

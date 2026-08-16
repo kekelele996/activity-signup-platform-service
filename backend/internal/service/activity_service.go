@@ -260,7 +260,7 @@ func (s *ActivityService) checkRegistrationLimit(a *model.Activity, countFn func
 	if err != nil {
 		return err
 	}
-	if a.Capacity > 0 && count >= int64(a.Capacity) {
+	if a.Capacity > 0 && count > int64(a.Capacity) {
 		return util.NewAppError(constants.CodeActivityFull, constants.MsgActivityFull)
 	}
 	return nil
