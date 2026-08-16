@@ -40,7 +40,7 @@ func (r *NotificationRepository) ListByUser(userID uint64, page, pageSize int) (
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("count notifications: %w", err)
 	}
-	if err := q.Order("created_at ASC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
+	if err := q.Order("created_at DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
 		return nil, 0, fmt.Errorf("list notifications: %w", err)
 	}
 	return list, total, nil
@@ -61,7 +61,7 @@ func (r *NotificationRepository) FindByID(id uint64) (*model.Notification, error
 // MarkRead 标记已读。
 func (r *NotificationRepository) MarkRead(id, userID uint64) error {
 	if err := r.db.Model(&model.Notification{}).
-		Where("id = ?", id).Update("is_read", true).Error; err != nil {
+		Where("id = ? AND user_id = ?", id, userID).Update("is_read", true).Error; err != nil {
 		return fmt.Errorf("mark notification read: %w", err)
 	}
 	return nil
@@ -70,7 +70,7 @@ func (r *NotificationRepository) MarkRead(id, userID uint64) error {
 // MarkAllRead 全部标记已读。
 func (r *NotificationRepository) MarkAllRead(userID uint64) error {
 	if err := r.db.Model(&model.Notification{}).
-		Update("is_read", true).Error; err != nil {
+		Where("user_id = ?", userID).Update("is_read", true).Error; err != nil {
 		return fmt.Errorf("mark all notifications read: %w", err)
 	}
 	return nil
